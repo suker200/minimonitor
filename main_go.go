@@ -1,12 +1,5 @@
 package main
 
-//mkdir pkg
-// export GOPATH=/home/suker/Project/Go/production
-// export PATH=$PATH:$GOPATH/bin
-// mkdir src/github.com/suker200/hello/
-// go build github.com/suker200
-// go install github.com/suker200
-
 import (
 	"crypto/md5"
 	"fmt"
