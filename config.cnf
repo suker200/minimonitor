@@ -1,0 +1,2 @@
+server01-hostname=server01,region=hcm,env=production-ccu:warning=1000,critical=1500,time=15-mem:warning=80,critical=95,time=5
+suker-hostname=suker01,region=hcm,env=production-email:tan.luong1989@gmail.com,x.lhtan@yahoo.com-ccu:warning=1002,critical=1555,time=15-mem:warning=80,critical=95,time=42
