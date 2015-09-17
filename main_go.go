@@ -15,7 +15,7 @@ func main() {
 	for {
 		// First loop, I left parsing config file because avoid wasting resource for reading and looping for get
 		// container config from config file
-		object_config, object_tag, check, check_md5 := config_parser.Config_parser()
+		object_config, object_tag, check, check_md5, list_monitor := config_parser.Config_parser()
 		os := config_parser.Get_distro_name()
 		// fmt.Print(check_md5)
 		if check {
@@ -39,7 +39,7 @@ func main() {
 					check_md5_check := hash.Sum(file_check)
 					if !reflect.DeepEqual(check_md5_check, check_md5) {
 						fmt.Println("File is changed! Re-Load new config")
-						object_config, object_tag, check, check_md5 = config_parser.Config_parser()
+						object_config, object_tag, check, check_md5, list_monitor = config_parser.Config_parser()
 					}
 				}
 				// start process data
@@ -47,20 +47,29 @@ func main() {
 				var influxdb_data string
 				// Decide send data to influxdb or not
 				var send_check bool = false
-				for key, _ := range object_config {
-					if key != "email" {
-						check := counter % object_config[key]["time"].(int)
-						if check == 0 {
-							go map_function[key].(func(os_name string, config map[string]map[string]interface{}, tag config_parser.Server, messages chan string))(os, object_config, object_tag, messages)
-							// fmt.Println(<-messages)
-							result := <-messages
-							influxdb_data = influxdb_data + result
-							send_check = true
-						}
-					} else if key == "email" {
+				// for key, _ := range object_config {
+				// 	if key != "email" {
+				// 		check := counter % object_config[key]["time"].(int)
+				// 		if check == 0 {
+				// 			go map_function[key].(func(os_name string, config map[string]map[string]interface{}, tag config_parser.Server, messages chan string))(os, object_config, object_tag, messages)
+				// 			// fmt.Println(<-messages)
+				// 			result := <-messages
+				// 			influxdb_data = influxdb_data + result
+				// 			send_check = true
+				// 		}
+				// 	} else if key == "email" {
+				// 		send_check = true
+				// 	}
+				fmt.Println(list_monitor)
+				for i := range list_monitor {
+					check := counter % object_config[list_monitor[i]]["time"].(int)
+					if check == 0 {
+						go map_function[list_monitor[i]].(func(os_name string, config map[string]map[string]interface{}, tag config_parser.Server, messages chan string))(os, object_config, object_tag, messages)
+						// fmt.Println(<-messages)
+						result := <-messages
+						influxdb_data = influxdb_data + result
 						send_check = true
 					}
-
 				}
 				// Reset counter, if not, wasting reousrce for calculating
 				counter += 5

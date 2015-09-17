@@ -29,12 +29,13 @@ func Get_distro_name() string {
 	return distro_name
 }
 
-func Config_parser() (map[string]map[string]interface{}, Server, bool, []uint8) {
+func Config_parser() (map[string]map[string]interface{}, Server, bool, []uint8, []string) {
 	// func main() {
 	object_feature := make(map[string]map[string]interface{})
 	var check_config bool = false
 	var check_md5 []uint8
 	var server_name string
+	var list_monitor []string
 	var server Server
 	var out bytes.Buffer
 	cmd := exec.Command("hostname")
@@ -71,17 +72,17 @@ func Config_parser() (map[string]map[string]interface{}, Server, bool, []uint8) 
 				if len(check_value_list) == 1 || len(check_format) == 1 {
 					data_parser[element_array[0]] = element_array[1]
 				} else {
+					list_monitor = append(list_monitor, element_array[0])
 					for count := 0; count < len(check_value_list); count++ {
 						temp_value := strings.Split(check_value_list[count], "=")
 						data_parser[temp_value[0]], err = strconv.Atoi(temp_value[1])
 					}
 				}
-
 				object_feature[element_array[0]] = data_parser
 			}
 			fmt.Println(object_feature)
 		}
 	}
 
-	return object_feature, server, check_config, check_md5
+	return object_feature, server, check_config, check_md5, list_monitor
 }
