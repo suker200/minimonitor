@@ -1,8 +1,10 @@
 package data_parser
 
 import (
-	"fmt"
+	"github.com/suker200/config_parser"
+	"github.com/suker200/data_report"
 	"io/ioutil"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -11,6 +13,7 @@ import (
 func Get_CPU_Sample() (idle, total uint64) {
 	contents, err := ioutil.ReadFile("/proc/stat")
 	if err != nil {
+		log.Fatal(err)
 		return
 	}
 	lines := strings.Split(string(contents), "\n")
@@ -21,7 +24,7 @@ func Get_CPU_Sample() (idle, total uint64) {
 			for i := 1; i < numFields; i++ {
 				val, err := strconv.ParseUint(fields[i], 10, 64)
 				if err != nil {
-					fmt.Println("Error: ", i, fields[i], err)
+					log.Fatal("Error: ", i, fields[i], err)
 				}
 				total += val // tally up all the numbers to get total ticks
 				if i == 4 {  // idle is the 5th field in the cpu line
@@ -34,13 +37,21 @@ func Get_CPU_Sample() (idle, total uint64) {
 	return
 }
 
-func Get_CPU_Usage() float64 {
-	idle0, total0 := getCPUSample()
+func GetCPUUsage(os string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
+	idle0, total0 := Get_CPU_Sample()
 	time.Sleep(1 * time.Second)
-	idle1, total1 := getCPUSample()
+	idle1, total1 := Get_CPU_Sample()
 
 	idleTicks := float64(idle1 - idle0)
 	totalTicks := float64(total1 - total0)
 	cpuUsage := 100 * (totalTicks - idleTicks) / totalTicks
-	return cpuUsage
+
+	warning_threshold := object_config["cpuusage"]["warning"].(float)
+	critical_threshold := object_config["cpuusage"]["critical"].(float)
+	data_report.Pushbullet_report(object_config["email"]["email"].(string), "CPUUsage", cpuUsage, warning_threshold, critical_threshold)
+
+	cpuUsage_msg := "cpuusage" + "," + object_tag.Tag + "," + "type=cpu_usage" + " value=" + cpuUsage + "\n"
+
+	messages <- cpuUsage_msg
+
 }
