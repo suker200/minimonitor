@@ -2,6 +2,7 @@ package data_parser
 
 import (
     "fmt"
+    "log"
     "strings"
     "io/ioutil"
     "github.com/suker200/config_parser"
@@ -12,7 +13,7 @@ func Memory(os string, object_config map[string]map[string]interface{}, object_t
     f, err := ioutil.ReadFile("/proc/meminfo")
     
     if err != nil {
-        panic(err)
+        log.Fatal(err)
     }
 
     memory_usage := ""
@@ -36,8 +37,8 @@ func Memory(os string, object_config map[string]map[string]interface{}, object_t
     critical_threshold := object_config["memory"]["critical"].(int)
     data_report.Pushbullet_report(object_config["email"]["email"].(string), "Memory", memory_usage, warning_threshold, critical_threshold)
 
-    memory := "memory_usage" + "," + "object_tag.Tag" + "," + "type=memory" + " value=" + memory_usage
-    memory += "\nmemory_limit" + "," + "object_tag.Tag" + "," + "type=memory" + " value=" + memory_limit
+    memory := "memory" + "," + "object_tag.Tag" + "," + "type=memory_usage" + " value=" + memory_usage + "\n"
+    memory += "memory" + "," + "object_tag.Tag" + "," + "type=memory_limit" + " value=" + memory_limit + "\n"
 
     messages <- memory
     //fmt.Println(memory)

@@ -2,6 +2,7 @@ package data_parser
 
 import (
     "fmt"
+    "log"
     "strings"
     "io/ioutil"
     "github.com/suker200/config_parser"
@@ -12,7 +13,7 @@ func LoadAvg(os string, object_config map[string]map[string]interface{}, object_
     f, err := ioutil.ReadFile("/proc/loadavg")
 
     if err != nil {
-        panic(err)
+        log.Fatal(err)
     }
 
     content := strings.TrimSpace(string(f))
@@ -26,17 +27,9 @@ func LoadAvg(os string, object_config map[string]map[string]interface{}, object_
     critical_threshold := object_config["loadavg1min"]["critical"].(int)
     data_report.Pushbullet_report(object_config["email"]["email"].(string), "LoadAvg1Min", loadavg15min, warning_threshold, critical_threshold)
 
-    warning_threshold := object_config["loadavg5min"]["warning"].(int)
-    critical_threshold := object_config["loadavg5min"]["critical"].(int)
-    data_report.Pushbullet_report(object_config["email"]["email"].(string), "LoadAvg5Min", loadavg15min, warning_threshold, critical_threshold)
-
-    warning_threshold := object_config["loadavg15min"]["warning"].(int)
-    critical_threshold := object_config["loadavg15min"]["critical"].(int)
-    data_report.Pushbullet_report(object_config["email"]["email"].(string), "LoadAvg15Min", loadavg15min, warning_threshold, critical_threshold)
-
-    loadavg := "loadavg1min" + "," + "object_tag.Tag" + "," + "type=loadavg" + " value=" + loadavg1min
-    loadavg += "\nloadavg5min" + "," + "object_tag.Tag" + "," + "type=loadavg" + " value=" + loadavg5min
-    loadavg += "\nloadavg15min" + "," + "object_tag.Tag" + "," + "type=loadavg" + " value=" + loadavg15min
+    loadavg := "loadavg" + "," + object_tag.Tag + "," + "type=loadavg1min" + " value=" + loadavg1min + "\n"
+    loadavg += "loadavg" + "," + object_tag.Tag + "," + "type=loadavg5min" + " value=" + loadavg5min + "\n"
+    loadavg += "loadavg" + "," + object_tag.Tag + "," + "type=loadavg15min" + " value=" + loadavg15min + "\n"
 
     messages <- loadavg
     //fmt.Println(loadavg)

@@ -2,6 +2,7 @@ package data_parser
 
 import (
     "fmt"
+    "log"
     "strings"
     "io/ioutil"
     "github.com/suker200/config_parser"
@@ -12,7 +13,7 @@ func Uptime(os string, object_config map[string]map[string]interface{}, object_t
     f, err := ioutil.ReadFile("/proc/uptime")
     
     if err != nil {
-        panic(err)
+        log.Fatal(err)
     }
 
     content := strings.TrimSpace(string(f))
@@ -24,8 +25,8 @@ func Uptime(os string, object_config map[string]map[string]interface{}, object_t
     critical_threshold := object_config["uptime"]["critical"].(int)
     data_report.Pushbullet_report(object_config["email"]["email"].(string), "Uptime", uptime_total, warning_threshold, critical_threshold)
 
-    uptime := "uptime_total" + "," + "object_tag.Tag" + "," + "type=uptime" + " value=" + uptime_total
-    uptime += "\nuptime_idle" + "," + "object_tag.Tag" + "," + "type=uptime" + " value=" + uptime_idle
+    uptime := "uptime" + "," + "object_tag.Tag" + "," + "type=uptime_total" + " value=" + uptime_total
+    uptime += "uptime" + "," + "object_tag.Tag" + "," + "type=uptime_idle" + " value=" + uptime_idle
 
     messages <- uptime
     //fmt.Println(uptime)

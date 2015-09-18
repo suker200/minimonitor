@@ -2,6 +2,7 @@ package data_parser
 
 import (
     "fmt"
+    "log"
     "strings"
     "io/ioutil"
     "github.com/suker200/config_parser"
@@ -12,7 +13,7 @@ func NetIO(os string, object_config map[string]map[string]interface{}, object_ta
     f, err := ioutil.ReadFile("/proc/net/dev")
     
     if err != nil {
-        panic(err)
+        log.Fatal(err)
     }
 
     netio := ""
@@ -25,8 +26,8 @@ func NetIO(os string, object_config map[string]map[string]interface{}, object_ta
             dev := strings.Replace(fields[0], ":" , "", -1)
             in  := fields[1]
             out := fields[9]
-            netio += "\nin" + "," + "object_tag.Tag" + "," + "type=netio" + " interface=" + dev + " value=" + in
-            netio += "\nout" + "," + "object_tag.Tag" + "," + "type=netio" + " interface=" + dev + " value=" + out
+            netio += "netio" + "," + "object_tag.Tag" + "," + "type=in" + " interface=" + dev + " value=" + in + "\n"
+            netio += "netio" + "," + "object_tag.Tag" + "," + "type=out" + " interface=" + dev + " value=" + out + "\n"
         }
     }
 
