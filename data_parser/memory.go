@@ -1,35 +1,45 @@
 package data_parser
 
 import (
-	"fmt"
-	"github.com/suker200/config_parser"
-	// "github.com/suker200/data_report"
-	"log"
-	"os/exec"
-	"strconv"
+    "fmt"
+    "strings"
+    "io/ioutil"
+    "github.com/suker200/config_parser"
+    //"github.com/suker200/data_report"
 )
 
-func Mem(os string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
-	var data = make(map[string][]byte)
-	var return_value string
-	data["centos"] = []byte("cat /proc/meminfo  | grep 'MemAvailable:' | awk '{print $2}' | tr '\n' ' ' | sed 's/ //'g")
-	data["ubuntu"] = []byte("cat /proc/meminfo  | grep 'MemAvailable:' | awk '{print $2}' | tr '\n' ' ' | sed 's/ //'g")
-	data["fedora"] = []byte("cat /proc/meminfo  | grep 'MemAvailable:' | awk '{print $2}' | tr '\n' ' ' | sed 's/ //'g")
+func Memory(os string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
+    f, err := ioutil.ReadFile("/proc/meminfo")
+    
+    if err != nil {
+        panic(err)
+    }
 
-	cmd := string(data[os][:])
-	out, err := exec.Command("bash", "-c", cmd).Output()
-	string_convert := string(out[:])
-	string_to_int, err := strconv.Atoi(string_convert)
-	if err == nil {
-		out := string_to_int / 1028
-		result := strconv.Itoa(out)
-		fmt.Println(result)
-		// data_report.Influxdb_report("memory", object_tag.Tag, result)
-		return_value = "memory" + "," + object_tag.Tag + " value=" + result
-		// return return_value
-	} else {
-		log.Fatal(err)
-	}
-	// return return_value
-	messages <- return_value
+    memory_usage := ""
+    memory_limit := ""
+    lines := strings.Split(string(f), "\n")
+    for _, line := range lines {
+        fields := strings.SplitN(line, ":", 2)
+
+        if strings.Compare(fields[0], "MemTotal") == 0 {
+            memory_limit = strings.TrimSpace(fields[1])
+            memory_limit = strings.Replace(memory_limit, " kB", "", -1)
+        }
+
+        if strings.Compare(fields[0], "Active") == 0 {
+            memory_usage = strings.TrimSpace(fields[1])
+            memory_usage = strings.Replace(memory_usage, " kB", "", -1)
+        }
+    }
+
+    warning_threshold := object_config["memory"]["warning"].(int)
+    critical_threshold := object_config["memory"]["critical"].(int)
+    data_report.Pushbullet_report(object_config["email"]["email"].(string), "Memory", memory_usage, warning_threshold, critical_threshold)
+
+    memory := "memory_usage" + "," + "object_tag.Tag" + "," + "type=memory" + " value=" + memory_usage
+    memory += "\nmemory_limit" + "," + "object_tag.Tag" + "," + "type=memory" + " value=" + memory_limit
+
+    messages <- memory
+    //fmt.Println(memory)
+    //return memory
 }
