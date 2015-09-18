@@ -46,12 +46,11 @@ func GetCPUUsage(os string, object_config map[string]map[string]interface{}, obj
 	totalTicks := float64(total1 - total0)
 	cpuUsage := 100 * (totalTicks - idleTicks) / totalTicks
 
-	warning_threshold := object_config["cpuusage"]["warning"].(float)
-	critical_threshold := object_config["cpuusage"]["critical"].(float)
-	data_report.Pushbullet_report(object_config["email"]["email"].(string), "CPUUsage", cpuUsage, warning_threshold, critical_threshold)
+	warning_threshold := object_config["cpuusage"]["warning"].(int)
+	critical_threshold := object_config["cpuusage"]["critical"].(int)
+	data_report.Pushbullet_report(object_config["email"]["email"].(string), "CPUUsage", strconv.FormatFloat(cpuUsage, 'f', -1, 64), warning_threshold, critical_threshold)
 
-	cpuUsage_msg := "cpuusage" + "," + object_tag.Tag + "," + "type=cpu_usage" + " value=" + cpuUsage + "\n"
+	cpuUsage_msg := "cpuusage" + "," + object_tag.Tag + "," + "type=cpu_usage" + " value=" + strconv.FormatFloat(cpuUsage, 'f', -1, 64) + "\n"
 
 	messages <- cpuUsage_msg
-
 }
