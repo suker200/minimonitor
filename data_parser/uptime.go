@@ -25,8 +25,8 @@ func Uptime(os string, object_config map[string]map[string]interface{}, object_t
     critical_threshold := object_config["uptime"]["critical"].(int)
     data_report.Pushbullet_report(object_config["email"]["email"].(string), "Uptime", uptime_total, warning_threshold, critical_threshold)
 
-    uptime := "uptime" + "," + "object_tag.Tag" + "," + "type=uptime_total" + " value=" + uptime_total
-    uptime += "uptime" + "," + "object_tag.Tag" + "," + "type=uptime_idle" + " value=" + uptime_idle
+    uptime := "uptime" + "," + object_tag.Tag + "," + "type=uptime_total" + " value=" + uptime_total
+    uptime += "uptime" + "," + object_tag.Tag + "," + "type=uptime_idle" + " value=" + uptime_idle
 
     messages <- uptime
     //fmt.Println(uptime)

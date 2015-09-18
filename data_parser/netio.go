@@ -26,8 +26,8 @@ func NetIO(os string, object_config map[string]map[string]interface{}, object_ta
             dev := strings.Replace(fields[0], ":" , "", -1)
             in  := fields[1]
             out := fields[9]
-            netio += "netio" + "," + "object_tag.Tag" + "," + "type=in" + " interface=" + dev + " value=" + in + "\n"
-            netio += "netio" + "," + "object_tag.Tag" + "," + "type=out" + " interface=" + dev + " value=" + out + "\n"
+            netio += "netio" + "," + object_tag.Tag + "," + "type=in" + " interface=" + dev + " value=" + in + "\n"
+            netio += "netio" + "," + object_tag.Tag + "," + "type=out" + " interface=" + dev + " value=" + out + "\n"
         }
     }
 

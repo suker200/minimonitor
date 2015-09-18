@@ -35,7 +35,7 @@ func Memory(os string, object_config map[string]map[string]interface{}, object_t
     critical_threshold := object_config["memory"]["critical"].(int)
     data_report.Pushbullet_report(object_config["email"]["email"].(string), "Memory", str_memory_usage, warning_threshold, critical_threshold)
 
-    memory := "memory" + "," + "object_tag.Tag" + "," + "type=memory_usage" + " value=" + str_memory_usage
+    memory := "memory" + "," + object_tag.Tag + "," + "type=memory_usage" + " value=" + str_memory_usage
 
     messages <- memory
     //fmt.Println(memory)
