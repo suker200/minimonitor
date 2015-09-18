@@ -6,7 +6,7 @@ import (
     "strings"
     "io/ioutil"
     "github.com/suker200/config_parser"
-    //"github.com/suker200/data_report"
+    "github.com/suker200/data_report"
 )
 
 func LoadAvg(os string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
