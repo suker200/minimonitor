@@ -23,9 +23,9 @@ func LoadAvg(os string, object_config map[string]map[string]interface{}, object_
     loadavg5min  := fields[1]
     loadavg15min := fields[2]
 
-    warning_threshold := object_config["loadavg1min"]["warning"].(int)
-    critical_threshold := object_config["loadavg1min"]["critical"].(int)
-    data_report.Pushbullet_report(object_config["email"]["email"].(string), "LoadAvg1Min", loadavg15min, warning_threshold, critical_threshold)
+    warning_threshold := object_config["loadavg"]["warning"].(int)
+    critical_threshold := object_config["loadavg"]["critical"].(int)
+    data_report.Pushbullet_report(object_config["email"]["email"].(string), "LoadAvg", loadavg15min, warning_threshold, critical_threshold)
 
     loadavg := "loadavg" + "," + object_tag.Tag + "," + "type=loadavg1min" + " value=" + loadavg1min + "\n"
     loadavg += "loadavg" + "," + object_tag.Tag + "," + "type=loadavg5min" + " value=" + loadavg5min + "\n"
