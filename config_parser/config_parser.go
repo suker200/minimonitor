@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os/exec"
-	// "reflect"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -48,16 +48,17 @@ func Config_parser() (map[string]map[string]interface{}, Server, bool, []uint8, 
 
 	if err != nil {
 		log.Fatal(err)
-		// return object_feature, server, check_config, check_md5
 	}
 
 	hash := md5.New()
 	check_md5 = hash.Sum(file)
 
 	data_file := string(file)
-	data_file_2 := strings.Split(data_file, "\n")
+	// data_file_2 := strings.Split(data_file, "\n")
 
-	for _, data := range data_file_2 {
+	var re = regexp.MustCompile(server_name_2[0] + "-.*")
+
+	for _, data := range re.FindAllString(data_file, -1) {
 		data_tmp := strings.Split(data, "-")
 		if data_tmp[0] == server.Name {
 			check_config = true
