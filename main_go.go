@@ -20,8 +20,11 @@ func main() {
 		// fmt.Print(check_md5)
 		if check {
 			map_function := map[string]interface{}{
-				"mem": data_parser.Mem,
-				"ccu": data_parser.Ccu,
+				"memory":   data_parser.Memory,
+				"ccu":      data_parser.Ccu,
+				"loadavg":  data_parser.LoadAvg,
+				"disk":     data_parser.Disk,
+				"cpuusage": data_parser.GetCPUUsage,
 			}
 
 			fmt.Println(object_config)
@@ -47,24 +50,10 @@ func main() {
 				var influxdb_data string
 				// Decide send data to influxdb or not
 				var send_check bool = false
-				// for key, _ := range object_config {
-				// 	if key != "email" {
-				// 		check := counter % object_config[key]["time"].(int)
-				// 		if check == 0 {
-				// 			go map_function[key].(func(os_name string, config map[string]map[string]interface{}, tag config_parser.Server, messages chan string))(os, object_config, object_tag, messages)
-				// 			// fmt.Println(<-messages)
-				// 			result := <-messages
-				// 			influxdb_data = influxdb_data + result
-				// 			send_check = true
-				// 		}
-				// 	} else if key == "email" {
-				// 		send_check = true
-				// 	}
-				fmt.Println(list_monitor)
 				for i := range list_monitor {
 					check := counter % object_config[list_monitor[i]]["time"].(int)
 					if check == 0 {
-						go map_function[list_monitor[i]].(func(os_name string, config map[string]map[string]interface{}, tag config_parser.Server, messages chan string))(os, object_config, object_tag, messages)
+						go map_function[list_monitor[i]].(func(os_name string, metric_name string, config map[string]map[string]interface{}, tag config_parser.Server, messages chan string))(os, list_monitor[i], object_config, object_tag, messages)
 						// fmt.Println(<-messages)
 						result := <-messages
 						influxdb_data = influxdb_data + result

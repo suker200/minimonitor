@@ -37,7 +37,7 @@ func Get_CPU_Sample() (idle, total uint64) {
 	return
 }
 
-func GetCPUUsage(os string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
+func GetCPUUsage(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
 	idle0, total0 := Get_CPU_Sample()
 	time.Sleep(1 * time.Second)
 	idle1, total1 := Get_CPU_Sample()
@@ -46,9 +46,8 @@ func GetCPUUsage(os string, object_config map[string]map[string]interface{}, obj
 	totalTicks := float64(total1 - total0)
 	cpuUsage := 100 * (totalTicks - idleTicks) / totalTicks
 
-	warning_threshold := object_config["cpuusage"]["warning"].(int)
-	critical_threshold := object_config["cpuusage"]["critical"].(int)
-	data_report.Pushbullet_report(object_config["email"]["email"].(string), "CPUUsage", strconv.FormatFloat(cpuUsage, 'f', -1, 64), warning_threshold, critical_threshold)
+	// data_report.Pushbullet_report(function, object_config, "CPUUsage", strconv.FormatFloat(cpuUsage, 'f', -1, 64))
+	data_report.Pushbullet_report(function, object_config, "CPUUsage", cpuUsage)
 
 	cpuUsage_msg := "cpuusage" + "," + object_tag.Tag + "," + "type=cpu_usage" + " value=" + strconv.FormatFloat(cpuUsage, 'f', -1, 64) + "\n"
 

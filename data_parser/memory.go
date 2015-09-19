@@ -10,9 +10,8 @@ import (
 	"strings"
 )
 
-func Memory(os string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
+func Memory(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
 	var re = regexp.MustCompile(`[\n%a-zA-Z ]`)
-
 	f, err := ioutil.ReadFile("/proc/meminfo")
 
 	if err != nil {
@@ -33,9 +32,7 @@ func Memory(os string, object_config map[string]map[string]interface{}, object_t
 		}
 	}
 
-	warning_threshold := object_config["memory"]["warning"].(int)
-	critical_threshold := object_config["memory"]["critical"].(int)
-	data_report.Pushbullet_report(object_config["email"]["email"].(string), "Memory", str_memory_usage, warning_threshold, critical_threshold)
+	data_report.Pushbullet_report(function, object_config, "Memory", str_memory_usage)
 
 	memory := "memory" + "," + object_tag.Tag + "," + "type=memory_usage" + " value=" + re.ReplaceAllString(str_memory_usage, "")
 

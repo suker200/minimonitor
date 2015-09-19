@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -21,7 +22,7 @@ func Influxdb_report(influxdb_data string) {
 	var query = []byte(POST_DATA)
 	req, err := http.NewRequest("POST", uri_path, bytes.NewBuffer(query))
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	fmt.Println(req)
 	client := &http.Client{}
