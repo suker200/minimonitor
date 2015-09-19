@@ -17,9 +17,9 @@ func Httpd(os string, object_config map[string]map[string]interface{}, object_ta
     }
     
     access_log := string(out[:])
-    access_log = "access_log" + "," + object_tag.Tag + "," + "type=access_log" + " value=" + access_log
+    httpd = "httpd" + "," + object_tag.Tag + "," + "type=httpd" + " value=" + access_log
 
-    messages <- access_log
-    //fmt.Println(access_log)
-    //return access_log
+    messages <- httpd
+    //fmt.Println(httpd)
+    //return httpd
 }
