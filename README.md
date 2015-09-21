@@ -6,7 +6,9 @@ We can write your own module to get custom metric from container, and this tool 
 - **Disadvantage**: working locally, container name is still not flexible.
 - **In Development**: support etcd for central configuration, support namespace in control container_name, active in manage create/delete down/useless container from docker cluster like kubernetes/docker swarm ....
 
-**Note**: Update [Influxdb server information](https://github.com/suker200/minimonitor/blob/master/data_report/influxdb_report.go)
+**Note**:
+- Update [Influxdb server information](https://github.com/suker200/minimonitor/blob/master/data_report/influxdb_report.go)
+- Update [pushbullet api](https://github.com/suker200/minimonitor/blob/master/data_report/pushbullet_report.go)
 
 ## Diagram
 ![Diagram tag](https://raw.githubusercontent.com/suker200/minimonitor/master/diagram_minimonitor.png)
@@ -45,7 +47,7 @@ suker-hostname=suker01,region=hcm,env=production-email:tan.luong@gmail.com,suker
 
     - 3 values will be sub data of column "loadavg" when graphing in influxdb + grafana
     - **Note**: this loadavg value will return for graphing by return to messages: messages <\- loadavg
-    - Take notification: call pushbullet function with some default variable
+    - **Take notification**: call pushbullet function with some default variable
       + data_report.Pushbullet_report(function, object_config, "LoadAvg1Min", loadavg1min)
       + **Clarify**:
         - function, object_config: from Function input
