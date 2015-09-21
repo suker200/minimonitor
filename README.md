@@ -66,29 +66,7 @@ Phase 3: attach your module to mini tool
 Phase 4: build mini tool and docker container
 	Example: This Dockerfile will build container run nginx and copy binary to container and run all services by init.sh script 
 	Note: in case container image does not have "ceritificate: x509: failed to load system roots and no roots provided" --> install certificate package by install : ca-certificates (ubuntu, alpine image), if not, notification send to https protocol will be failed.
-
-Dockerfile:
-	FROM alpine
-	MAINTAINER Suker200 <tan.luong1989@gmail.com>
-	RUN apk update
-	RUN apk add pcre pcre-dev zlib zlib-dev bash iproute2 ca-certificates
-	RUN adduser -D -H -u 10000 -s /sbin/nologin www
-	RUN mkdir -p /build/nginx/
-	COPY nginx/ /build/nginx/
-	COPY config.cnf /
-	COPY init.sh /
-	COPY nginx.conf /
-	COPY index.html /
-	COPY minimonitor /
-	ENTRYPOINT ["/bin/sh"]
-	CMD ["/init.sh"]
-	EXPOSE 80
-
-init.sh: 
-	#!/bin/sh
-	cd /
-	./minimonitor &
-	/build/nginx/sbin/nginx -c /nginx.conf
+	Using: Dockerfile and init.sh in repo for example.
 
 Note: we have still using "fmt" to print out data, we can check for working status by using "docker logs <container_name>". About config.cnf, we can using "-v" option for changing config, binary will auto reload when there has change in config file.
 Beside that, for easy control, config for all container can put to one file and sync to all host.
