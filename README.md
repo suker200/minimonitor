@@ -34,9 +34,9 @@ Phase 3: attach your module to mini tool <br />
 				data_report.Pushbullet_report(function, object_config, "LoadAvg1Min", loadavg1min)
 
 				*Clarify:
-					function, object_config: from Function input <br /> 
-					LoadAvg1Min: this will be title of message alarm <br />
-					loadavg1min: value for check threshold <br />
+					function, object_config: from Function input
+					LoadAvg1Min: this will be title of message alarm
+					loadavg1min: value for check threshold
 
 
 	- Edit main_go.go: <br />
