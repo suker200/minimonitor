@@ -1,18 +1,18 @@
 This is a mini monitor tool for monitor custom metric from container, and should be start inside container when spawned. It will get custom metric for alarm  via pushbullet and send data to influxdb for graphing.
 We can write your own module to get custom metric from container, and this tool will help us monitor base on pre-define metric threshold, and push data for graphing.
 
-+ Disadvantage: working localy, container_name is not flexible.
-+ Development: support etcd for central configuration, support namespace in control container_name, active in manage create/delete down/useless container from docker cluster like kubernetes/docker swarm ....
++ <b>Disadvantage</b>: working localy, container_name is not flexible.
++ <b>In Development</b>: support etcd for central configuration, support namespace in control container_name, active in manage create/delete down/useless container from docker cluster like kubernetes/docker swarm ....
 
-Note: Update Influxdb server information: /github.com/suker200/minimonitor/data_report/influxdb_report.go
+<b>Note</b>: Update Influxdb server information: /github.com/suker200/minimonitor/data_report/influxdb_report.go
 
-Phase 1: Write you own module --> your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7.2 etc..)
+<b>Phase 1</b>: Write you own module --> your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7.2 etc..)
 
-Phase 2: Prepare for graphing: We have example config from config.cnf <br />
+<b>Phase 2</b>: Prepare for graphing: We have example config from config.cnf <br />
 	- suker-hostname=suker01,region=hcm,env=production-email:tan.luong@gmail.com,suker200@gmail.com-ccu:warning=10,critical=300,time=15 <br />
 	--> Clarify : suker (container name), hostname=suker01,region=hcm,env=production (format your column when graphing), email (for send notification), ccu:warning=10,critical=300,time=15 (ccu : metric, warning-critical : threshold, time: interval schedule check)
 
-Phase 3: attach your module to mini tool <br />
+<b>Phase 3</b>: attach your module to mini tool <br />
 		- Your import block : input two modules : "github.com/suker200/minimonitor/config_parser" + "github.com/suker200/minimonitor/data_report" <br />
 		- Your Function input: <br />
 			+ func Ccu(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string): this is your function name with default input we should use <br />
@@ -52,10 +52,10 @@ Phase 3: attach your module to mini tool <br />
 			}
 		+ puth your path module to import block of main_go.go
 
-Phase 4: build mini tool and docker container <br /> 
+<b>Phase 4</b>: build mini tool and docker container <br /> 
 	Example: This Dockerfile will build container run nginx and copy binary to container and run all services by init.sh script <br />
 	Note: in case container image does not have "ceritificate: x509: failed to load system roots and no roots provided" --> install certificate package by install : ca-certificates (ubuntu, alpine image), if not, notification send to https protocol will be failed. <br />
 	Using: Dockerfile and init.sh in repo for example. <br />
 
-Note: we have still using "fmt" to print out data, we can check for working status by using "docker logs <container_name>". About config.cnf, we can using "-v" option for changing config, binary will auto reload when there has change in config file. <br />
+<b>Note</b>: we have still using "fmt" to print out data, we can check for working status by using "docker logs <container_name>". About config.cnf, we can using "-v" option for changing config, binary will auto reload when there has change in config file. <br />
 Beside that, for easy control, config for all container can put to one file and sync to all host. <br />
