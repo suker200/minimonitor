@@ -15,12 +15,14 @@ We can write your own module to get custom metric from container, and this tool 
 Your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7.2 etc..)
 
 ## Phase 2: Prepare for graphing: We have example config from config.cnf
-- `suker-hostname=suker01,region=hcm,env=production-email:tan.luong@gmail.com,suker200@gmail.com-ccu:warning=10,critical=300,time=15`
-- **Clarify** :
-  + *suker* (container name)
-  + *hostname=suker01,region=hcm,env=production* (format your column when graphing)
-  + *email* (for send notification)
-  + *ccu:warning=10,critical=300,time=15* (ccu : metric, warning-critical : threshold, time: interval schedule check)
+```
+suker-hostname=suker01,region=hcm,env=production-email:tan.luong@gmail.com,suker200@gmail.com-ccu:warning=10,critical=300,time=15
+```
+**Clarify** :
+- *suker* (container name)
+- *hostname=suker01,region=hcm,env=production* (format your column when graphing)
+- *email* (for send notification)
+- *ccu:warning=10,critical=300,time=15* (ccu : metric, warning-critical : threshold, time: interval schedule check)
 
 ## Phase 3: attach your module to mini tool
 - Your import block : input two modules : [Config parser](https://github.com/suker200/minimonitor/tree/master/config_parser) + [Data report](https://github.com/suker200/minimonitor/tree/master/data_report)
@@ -52,14 +54,14 @@ Your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7
 
   + Edit `main_go.go`:
     - Put your function like here for map function, key is `metric_name = function_name`
-        ```go
+        ```
         map_function := map[string]interface{}{ 
             "memory":   data_parser.Memory,
             "ccu":      data_parser.Ccu,
             "loadavg":  data_parser.LoadAvg,
             "disk":     data_parser.Disk,
             "cpuusage": data_parser.GetCPUUsage
-			  }
+        }
         ```
     - Put your path module to import block of `main_go.go`
 
