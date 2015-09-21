@@ -11,7 +11,7 @@ We can write your own module to get custom metric from container, and this tool 
 ## Diagram
 ![Diagram tag](https://raw.githubusercontent.com/suker200/minimonitor/master/diagram_minimonitor.png)
 
-## Phase 1: Write you own module
+## Phase 1: Write your own module
 Your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7.2 etc..)
 
 ## Phase 2: Prepare for graphing: We have example config from config.cnf
