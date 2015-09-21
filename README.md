@@ -4,6 +4,8 @@ We can write your own module to get custom metric from container, and this tool 
 + Disadvantage: working localy, container_name is not flexible.
 + Development: support etcd for central configuration, support namespace in control container_name, active in manage create/delete down/useless container from docker cluster like kubernetes/docker swarm ....
 
+Note: Update Influxdb server information: /github.com/suker200/minimonitor/data_report/influxdb_report.go
+
 Phase 1: Write you own module --> your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7.2 etc..)
 
 Phase 2: Prepare for graphing: We have example config from config.cnf <br />
