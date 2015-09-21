@@ -15,13 +15,13 @@ We can write your own module to get custom metric from container, and this tool 
 <b>Phase 3</b>: attach your module to mini tool <br />
 		- Your import block : input two modules : "github.com/suker200/minimonitor/config_parser" + "github.com/suker200/minimonitor/data_report" <br />
 		- Your Function input: <br />
-			+ func Ccu(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string): this is your function name with default input we should use <br />
-			+ os: we try to detect your os, you can use or not. No issue <br />
-			+ function: this is metric name we define in config.cnf, Note: metric_name = function_name for us easy and flexible using <br />
-			+ object_config: all your config from config.cnf will be parse and put here <br />
-				* map[ccu:map[time:15 warning:10 critical:300] loadavg:map[warning:10 critical:20 time:10]
-			+ object_tag: this is hostname=suker01,region=hcm,env=production
-			+ messages: we use goroutine
+			<t>+ func Ccu(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string): this is your function name with default input we should use </t><br />
+			<t>+ os: we try to detect your os, you can use or not. No issue</t> <br />
+			<t>+ function: this is metric name we define in config.cnf, Note: metric_name = function_name for us easy and flexible using</t> <br />
+			<t>+ object_config: all your config from config.cnf will be parse and put here</t> <br />
+				<t>* map[ccu:map[time:15 warning:10 critical:300] loadavg:map[warning:10 critical:20 time:10]</t>
+			<t>+ object_tag: this is hostname=suker01,region=hcm,env=production<t>
+			<t>+ messages: we use goroutine</t>
 
 		- Your Function body:
 			+ Prepare data for graphing: examle loadavg we have 3 value: 1min, 5mins, 15mins, generate 3 string and append with "\n" delimiter
