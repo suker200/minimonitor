@@ -11,29 +11,29 @@ Phase 2: Prepare for graphing: We have example config from config.cnf <br />
 	--> Clarify : suker (container name), hostname=suker01,region=hcm,env=production (format your column when graphing), email (for send notification), ccu:warning=10,critical=300,time=15 (ccu : metric, warning-critical : threshold, time: interval schedule check)
 
 Phase 3: attach your module to mini tool <br />
-		- Your import block : input two modules : "github.com/suker200/minimonitor/config_parser" + "github.com/suker200/minimonitor/data_report"
-		- Your Function input: 
-			+ func Ccu(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string): this is your function name with default input we should use
+		- Your import block : input two modules : "github.com/suker200/minimonitor/config_parser" + "github.com/suker200/minimonitor/data_report" <br />
+		- Your Function input: <br />
+			+ func Ccu(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string): this is your function name with default input we should use <br />
 			+ os: we try to detect your os, you can use or not. No issue <br />
-			+ function: this is metric name we define in config.cnf, Note: metric_name = function_name for us easy and flexible using
+			+ function: this is metric name we define in config.cnf, Note: metric_name = function_name for us easy and flexible using <br />
 			+ object_config: all your config from config.cnf will be parse and put here <br />
 				* map[ccu:map[time:15 warning:10 critical:300] loadavg:map[warning:10 critical:20 time:10]
 			+ object_tag: this is hostname=suker01,region=hcm,env=production
 			+ messages: we use goroutine
 
-		- Your Function body: <br />
-			+ Prepare data for graphing: examle loadavg we have 3 value: 1min, 5mins, 15mins, generate 3 string and append with "\n" delimiter <br />
-				loadavg := "loadavg" + "," + object_tag.Tag + "," + "type=loadavg1min" + " value=" + loadavg1min + "\n" <br /> 
-				loadavg += "loadavg" + "," + object_tag.Tag + "," + "type=loadavg5min" + " value=" + loadavg5min + "\n" <br />
-				loadavg += "loadavg" + "," + object_tag.Tag + "," + "type=loadavg15min" + " value=" + loadavg15min + "\n" <br />
+		- Your Function body:
+			+ Prepare data for graphing: examle loadavg we have 3 value: 1min, 5mins, 15mins, generate 3 string and append with "\n" delimiter
+				loadavg := "loadavg" + "," + object_tag.Tag + "," + "type=loadavg1min" + " value=" + loadavg1min + "\n"
+				loadavg += "loadavg" + "," + object_tag.Tag + "," + "type=loadavg5min" + " value=" + loadavg5min + "\n"
+				loadavg += "loadavg" + "," + object_tag.Tag + "," + "type=loadavg15min" + " value=" + loadavg15min + "\n"
 
-				3 values will be sub data of cloumn "loadavg" when graphing in influxdb + grafana <br /> 
+				3 values will be sub data of cloumn "loadavg" when graphing in influxdb + grafana
 
-				* Note: this loadavg value will return for graphing by return to messages: messages <- ladavg <br />
+				* Note: this loadavg value will return for graphing by return to messages: messages <- loadavg
 			+ Take notification: call pushbullet function with some default variable 
-				data_report.Pushbullet_report(function, object_config, "LoadAvg1Min", loadavg1min) <br />
+				data_report.Pushbullet_report(function, object_config, "LoadAvg1Min", loadavg1min)
 
-				*Clarify: <br />
+				*Clarify:
 					function, object_config: from Function input <br /> 
 					LoadAvg1Min: this will be title of message alarm <br />
 					loadavg1min: value for check threshold <br />
