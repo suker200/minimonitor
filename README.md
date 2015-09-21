@@ -16,6 +16,7 @@ MiniMonitor --> Config_parsing --> change --> no -->  check_schedule_metric
 
 
 Phase 1: Write you own module --> your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7.2 etc..)
+
 Phase 2: Prepare for graphing
 	- We have example config from config.cnf: 
 		+ suker-hostname=suker01,region=hcm,env=production-email:tan.luong@gmail.com,suker200@gmail.com-ccu:warning=10,critical=300,time=15
