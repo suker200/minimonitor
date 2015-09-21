@@ -3,9 +3,9 @@ package main
 import (
 	"crypto/md5"
 	"fmt"
-	"github.com/suker200/config_parser"
-	"github.com/suker200/data_parser"
-	"github.com/suker200/data_report"
+	"github.com/suker200/minimonitor/config_parser"
+	"github.com/suker200/minimonitor/data_parser"
+	"github.com/suker200/minimonitor/data_report"
 	"io/ioutil"
 	"reflect"
 	"time"
