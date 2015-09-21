@@ -14,8 +14,9 @@ func Disk(os string, function string, object_config map[string]map[string]interf
 	var data = make(map[string]string)
 	var re = regexp.MustCompile(`[\n%a-zA-Z ]`)
 
-	data["centos"] = "df -h | grep '/mapper/' | grep -v 'resolv.conf\\|hostname\\|hosts' | awk '{print $5,$6}'"
-	data["fedora"] = "df -h | grep '/mapper/' | grep -v 'resolv.conf\\|hostname\\|hosts' | awk '{print $5,$6}'"
+	data["centos"] = "df -P | grep '/mapper/' | rev | cut -d ' ' -f1,2 | rev"
+	data["fedora"] = "df -P | grep '/mapper/' | rev | cut -d ' ' -f1,2 | rev"
+	data["alpine linux"] = "df -P | grep '/mapper/' | rev | cut -d ' ' -f1,2 | rev"
 
 	disk_cmd := exec.Command("sh", "-c", data[os])
 	disk_out, err := disk_cmd.Output()

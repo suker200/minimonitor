@@ -1,39 +1,39 @@
 package data_parser
 
 import (
-    "fmt"
-    "log"
-    "strings"
-    "io/ioutil"
-    "github.com/suker200/config_parser"
-    "github.com/suker200/data_report"
+	// "fmt"
+	"github.com/suker200/minimonitor/config_parser"
+	// "github.com/suker200/minimonitor/data_report"
+	"io/ioutil"
+	"log"
+	"strings"
 )
 
 func NetIO(os string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) {
-    f, err := ioutil.ReadFile("/proc/net/dev")
-    
-    if err != nil {
-        log.Fatal(err)
-    }
+	f, err := ioutil.ReadFile("/proc/net/dev")
 
-    netio := ""
-    lines := strings.Split(string(f), "\n")
-    for _, line := range lines {
-        if strings.Contains(line, ":") {
-            content := strings.TrimSpace(line)
-            fields := strings.Fields(content)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-            dev := strings.Replace(fields[0], ":" , "", -1)
-            in  := fields[1]
-            out := fields[9]
-            netio += "netio" + "," + object_tag.Tag + "," + "type=in" + " interface=" + dev + " value=" + in + "\n"
-            netio += "netio" + "," + object_tag.Tag + "," + "type=out" + " interface=" + dev + " value=" + out + "\n"
-        }
-    }
+	netio := ""
+	lines := strings.Split(string(f), "\n")
+	for _, line := range lines {
+		if strings.Contains(line, ":") {
+			content := strings.TrimSpace(line)
+			fields := strings.Fields(content)
 
-    netio = strings.TrimPrefix(netio, "\n")
+			dev := strings.Replace(fields[0], ":", "", -1)
+			in := fields[1]
+			out := fields[9]
+			netio += "netio" + "," + object_tag.Tag + "," + "type=in" + " interface=" + dev + " value=" + in + "\n"
+			netio += "netio" + "," + object_tag.Tag + "," + "type=out" + " interface=" + dev + " value=" + out + "\n"
+		}
+	}
 
-    messages <- netio
-    //fmt.Println(netio)
-    //return netio
+	netio = strings.TrimPrefix(netio, "\n")
+
+	messages <- netio
+	//fmt.Println(netio)
+	//return netio
 }
