@@ -4,17 +4,6 @@ We can write your own module to get custom metric from container, and this tool 
 + Disadvantage: working localy, container_name is not flexible.
 + Development: support etcd for central configuration, support namespace in control container_name, active in manage create/delete down/useless container from docker cluster like kubernetes/docker swarm ....
 
--- FLow data:
-MiniMonitor --> Config_parsing --> change --> no -->  check_schedule_metric
-					          |				        |                   |
-					          |               yes                 |
-					          |___reload______|						        |
-														                            Time up 					
-															                            |_run command--> main_go->Influxdb_function->send metric
-																			                          |
-                    notification<-check_threshold<-call Pushbullet_function
-
-
 Phase 1: Write you own module --> your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7.2 etc..)
 
 Phase 2: Prepare for graphing
