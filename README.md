@@ -18,8 +18,8 @@ MiniMonitor --> Config_parsing --> change --> no -->  check_schedule_metric
 Phase 1: Write you own module --> your metric data from your module can be: string, float, int (10MB, 1000, 20%, 7.2 etc..)
 
 Phase 2: Prepare for graphing
-	- We have example config from config.cnf: 
-		+ suker-hostname=suker01,region=hcm,env=production-email:tan.luong@gmail.com,suker200@gmail.com-ccu:warning=10,critical=300,time=15
+	- We have example config from config.cnf
+	+ suker-hostname=suker01,region=hcm,env=production-email:tan.luong@gmail.com,suker200@gmail.com-ccu:warning=10,critical=300,time=15
 	--> Clarify : suker (container name), hostname=suker01,region=hcm,env=production (format your column when graphing), email (for send notification), ccu:warning=10,critical=300,time=15 (ccu : metric, warning-critical : threshold, time: interval schedule check)
 
 Phase 3: attach your module to mini tool
