@@ -11,16 +11,15 @@ Phase 2: Prepare for graphing: We have example config from config.cnf <br />
 	--> Clarify : suker (container name), hostname=suker01,region=hcm,env=production (format your column when graphing), email (for send notification), ccu:warning=10,critical=300,time=15 (ccu : metric, warning-critical : threshold, time: interval schedule check)
 
 Phase 3: attach your module to mini tool <br />
-	- Your module <br />
-		- Your import block : input two modules : "github.com/suker200/minimonitor/config_parser" + "github.com/suker200/minimonitor/data_report" <br />
+		- Your import block : input two modules : "github.com/suker200/minimonitor/config_parser" + "github.com/suker200/minimonitor/data_report"
 		- Your Function input: 
-			+ func Ccu(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string) : this is your function name with default input we should use <br />
+			+ func Ccu(os string, function string, object_config map[string]map[string]interface{}, object_tag config_parser.Server, messages chan string): this is your function name with default input we should use
 			+ os: we try to detect your os, you can use or not. No issue <br />
-			+ function: this is metric name we define in config.cnf, Note: metric_name = function_name for us easy and flexible using <br />
+			+ function: this is metric name we define in config.cnf, Note: metric_name = function_name for us easy and flexible using
 			+ object_config: all your config from config.cnf will be parse and put here <br />
-				* map[ccu:map[time:15 warning:10 critical:300] loadavg:map[warning:10 critical:20 time:10] <br />
-			+ object_tag: this is hostname=suker01,region=hcm,env=production <br />
-			+ messages: we use goroutine <br />
+				* map[ccu:map[time:15 warning:10 critical:300] loadavg:map[warning:10 critical:20 time:10]
+			+ object_tag: this is hostname=suker01,region=hcm,env=production
+			+ messages: we use goroutine
 
 		- Your Function body: <br />
 			+ Prepare data for graphing: examle loadavg we have 3 value: 1min, 5mins, 15mins, generate 3 string and append with "\n" delimiter <br />
