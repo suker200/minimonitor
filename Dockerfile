@@ -1,5 +1,5 @@
 FROM alpine 
-MAINTAINER Suker200 <tan.luong1989@gmail.com>
+MAINTAINER Suker200 <tan.luong1989_2@gmail.com>
 RUN apk update
 RUN apk add pcre pcre-dev zlib zlib-dev bash iproute2 ca-certificates 
 RUN adduser -D -H -u 10000 -s /sbin/nologin www
